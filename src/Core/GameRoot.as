@@ -1,9 +1,10 @@
 package Core
 {
-	import Component.Camera.CameraManager;
-	import Component.Camera.CameraType;
+	import Camera.CameraManager;
+	import Camera.CameraType;
 	
-	import System.CameraSystem;
+	import Logic.LogicEntityManager;
+	
 	import System.SceneSystem;
 	import System.SystemPriority;
 	
@@ -23,7 +24,7 @@ package Core
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
 
-	public class GameManager
+	public class GameRoot
 	{	
 		// away3d相关
 		private var _stage3DManger:Stage3DManager;
@@ -37,9 +38,9 @@ package Core
 		
 		private var _stage:Stage;					// 主舞台
 		
-		static private var _instance:GameManager
+		static private var _instance:GameRoot
 		
-		public function GameManager()
+		public function GameRoot()
 		{
 			_ashEngine = new Engine();
 			getTimer()
@@ -49,11 +50,11 @@ package Core
 		/**
 		 * 	获取ViewManager实例
 		 * */
-		static public function getInstance():GameManager
+		static public function getInstance():GameRoot
 		{
 			if( !_instance )
 			{
-				_instance = new GameManager();
+				_instance = new GameRoot();
 			}
 			
 			return _instance;
@@ -87,6 +88,7 @@ package Core
 			_view = new View3D( scene, camera, renderer, forceSoftware, _profile );
 			_view.stage3DProxy = _stage3DProxy;	
 			_stage.addChild( _view );
+			onResize(null);
 			
 			_view.camera.lens.far = 4000;
 			_view.camera.lens.near = 1;
@@ -152,8 +154,6 @@ package Core
 			this._stage.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 			this._stage.addEventListener( KeyboardEvent.KEY_UP, onKeyUp );
 			this._stage.addEventListener( Event.RESIZE, onResize );
-			
-			onResize(null);
 		}
 		
 		
@@ -168,6 +168,8 @@ package Core
 			this.CreateView();
 			
 			InitSystem();
+			
+			LogicEntityManager.getInstance().changeScene("E:/Code/flashgame/bin-debug/embeds/terrain/terrain_diffuse.jpg","E:/Code/flashgame/bin-debug/embeds/terrain/terrain_heights.jpg");
 		}
 		
 		
@@ -177,7 +179,6 @@ package Core
 		private function InitSystem():void
 		{
 			_ashEngine.addSystem( new SceneSystem(), SystemPriority.UPDATE );
-			_ashEngine.addSystem( new CameraSystem(), SystemPriority.UPDATE );
 		}
 		
 		
@@ -259,7 +260,9 @@ package Core
 			if( _ashEngine )
 			{
 				var curTime:int = getTimer();
-				_ashEngine.update( curTime - _lastFrameTime );
+				var deltTime:int = curTime - _lastFrameTime;
+				CameraManager.getInstance().updata( deltTime );
+				_ashEngine.update( deltTime );
 				_lastFrameTime = curTime;
 			}
 		}

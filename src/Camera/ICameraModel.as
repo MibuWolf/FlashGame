@@ -1,4 +1,4 @@
-package Component.Camera
+package Camera
 {
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;

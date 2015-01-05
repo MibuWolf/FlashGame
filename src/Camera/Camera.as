@@ -1,4 +1,4 @@
-package Component.Camera
+package Camera
 {
 	import away3d.containers.ObjectContainer3D;
 	

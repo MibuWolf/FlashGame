@@ -1,4 +1,4 @@
-package Component.Camera
+package Camera
 {
 	import away3d.cameras.Camera3D;
 	import away3d.containers.ObjectContainer3D;
@@ -97,6 +97,8 @@ package Component.Camera
 			lastTiltAngle = _cameraController.tiltAngle;
 			lastMouseX = event.stageX;
 			lastMouseY = event.stageY;
+			curMouseX = event.stageX;
+			curMouseY = event.stageY;
 		}
 		
 		/**

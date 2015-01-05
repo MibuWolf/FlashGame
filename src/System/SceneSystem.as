@@ -1,8 +1,11 @@
 package System
 {
-	import Core.GameManager;
+	import Core.GameRoot;
+	
+	import Node.SceneNode;
 	
 	import ash.core.Engine;
+	import ash.core.NodeList;
 	import ash.core.System;
 	
 	import away3d.entities.Mesh;
@@ -24,6 +27,8 @@ package System
 		[Embed(source="/../bin-debug/embeds/terrain/terrain_heights.jpg")]
 		private var HeightMap:Class;
 		
+		private var _sceneList:NodeList;
+		
 		public function SceneSystem()
 		{
 			super();
@@ -35,14 +40,30 @@ package System
 		 * */
 		override public function addToEngine(engine:Engine):void
 		{
-			terrainMaterial = new TextureMaterial(Cast.bitmapTexture(Albedo));;
-			terrainMaterial.ambientColor = 0x303040;
-			terrainMaterial.ambient = 1;
-			terrainMaterial.specular = .2;
-			var terrain:Elevation = new Elevation(terrainMaterial, Cast.bitmapData(HeightMap), 5000, 1300, 5000, 250, 250);
-			GameManager.getInstance().view.scene.addChild( terrain );
+//			terrainMaterial = new TextureMaterial(Cast.bitmapTexture(Albedo));;
+//			terrainMaterial.ambientColor = 0x303040;
+//			terrainMaterial.ambient = 1;
+//			terrainMaterial.specular = .2;
+//			var terrain:Elevation = new Elevation(terrainMaterial, Cast.bitmapData(HeightMap), 5000, 1300, 5000, 250, 250);
+//			GameRoot.getInstance().view.scene.addChild( terrain );
+			
+			_sceneList = engine.getNodeList( SceneNode );
+			
+			_sceneList.nodeAdded.add( onAdded );
+			_sceneList.nodeRemoved.add( onRemoved );
 		}
 		
+		
+		private function onAdded( node:SceneNode ):void
+		{
+			
+		}
+		
+		
+		private function onRemoved( node:SceneNode ):void
+		{
+		
+		}
 		
 		
 		/**
@@ -53,5 +74,11 @@ package System
 		
 		}
 		
+		
+		
+		override public function update(time:Number):void
+		{
+		
+		}
 	}
 }

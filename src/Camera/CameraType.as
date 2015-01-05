@@ -1,4 +1,4 @@
-package Component.Camera
+package Camera
 {
 	public class CameraType
 	{

@@ -1,4 +1,4 @@
-package Core
+package Core.Renderable
 {
 	import away3d.animators.SkeletonAnimationSet;
 	import away3d.animators.SkeletonAnimator;
@@ -17,12 +17,12 @@ package Core
 
 	public class Avatar extends ObjectContainer3D
 	{
-		private var _bundles:Dictionary = new Dictionary();
+		public static var bundles:Dictionary = new Dictionary();
 				
 		private var _ID:String;			// 模型ID
 		private var _action:String;		// 当前动作
 		private var _mesh:Mesh;			// 网格数据
-		private var _type:String;			// 
+		private var _type:String;		// 资源类型(之后会统一类型)
 		
 		
 		public function Avatar( __ID:String, __type:String = "md2" )
@@ -43,14 +43,14 @@ package Core
 			
 			_ID = value;
 			
-			if( _bundles[_ID] == null )
+			if( bundles[_ID] == null )
 			{
 				var  path:String = "embeds/Avatar/" + _ID + "/" + _ID + "." + _type;
 				var loader:AssetLibraryBundle = AssetLibrary.getBundle( _ID );
 				loader.load( path, null, null, new MD2Parser() );
 				loader.addEventListener( AssetEvent.ASSET_COMPLETE, onAssetComplete, false, 0, false );
 				loader.addEventListener( LoaderEvent.RESOURCE_COMPLETE, onResourceComplete, false, 0, false );
-				_bundles[_ID] = true;
+				bundles[_ID] = true;
 			}
 		}
 		
