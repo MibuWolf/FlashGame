@@ -23,6 +23,7 @@ package Core
 		public static var meshBundles:Dictionary = new Dictionary();
 		public static var meshFuns:Dictionary = new Dictionary();
 		public static var textureBundles:Dictionary = new Dictionary();
+		public static var textureDic:Dictionary = new Dictionary();
 		public static var textureFuns:Dictionary = new Dictionary();
 		public static var cubeBundles:Dictionary = new Dictionary();
 		public static var cubeFuns:Dictionary = new Dictionary();
@@ -82,7 +83,7 @@ package Core
 			}
 			else
 			{
-				func();
+				func( textureDic[path] );
 			}
 		}
 		
@@ -111,7 +112,9 @@ package Core
 				}
 			}
 			
+			
 			textureFuns[url] = null;
+			textureDic[url] = image.content;
 		}
 		
 		/** 

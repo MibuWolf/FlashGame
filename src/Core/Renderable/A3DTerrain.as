@@ -18,7 +18,7 @@ package Core.Renderable
 	
 	import mx.resources.ResourceManager;
 
-	public class SceneObject  extends ObjectContainer3D
+	public class A3DTerrain  extends ObjectContainer3D
 	{
 		private var _terrain:Elevation;					// 地形
 		private var _terrainTexture:String;				// 地形纹理
@@ -26,14 +26,8 @@ package Core.Renderable
 		private var _terrainHTex:String;				// 地形高度纹理
 		private var _terrainHBitmapData:BitmapData;		// 高度图
 		
-		private var _skyBox:SkyBox;						// 天空盒
-		private var _cubeTexture:String;				// 天空盒纹理
 		
-		private var _sceneObj:Mesh;						// 场景
-		private var _sceneID:String;					// 场景ID
-		
-		
-		public function SceneObject( terrainTex:String = null, terrainHTex:String = null, cubeTex:String = null, objName:String = null )
+		public function A3DTerrain( terrainTex:String, terrainHTex:String )
 		{
 			if( terrainTex && terrainHTex )
 			{
@@ -85,14 +79,10 @@ package Core.Renderable
 			_terrainHTex = null;
 			_terrainMaterial.dispose();
 			_terrainMaterial = null;
-			
-			_skyBox = null;
-			_cubeTexture = null;
+
 			_terrainHBitmapData.dispose();
 			_terrainHBitmapData = null;
-			
-			_scene = null;
-			_sceneID = null;
+
 		}
 	}
 }

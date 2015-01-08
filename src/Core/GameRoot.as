@@ -90,7 +90,7 @@ package Core
 			_stage.addChild( _view );
 			onResize(null);
 			
-			_view.camera.lens.far = 4000;
+			_view.camera.lens.far = 10000;
 			_view.camera.lens.near = 1;
 			_view.camera.y = 300;
 			
@@ -169,7 +169,7 @@ package Core
 			
 			InitSystem();
 			
-			LogicEntityManager.getInstance().changeScene("E:/Code/flashgame/bin-debug/embeds/terrain/terrain_diffuse.jpg","E:/Code/flashgame/bin-debug/embeds/terrain/terrain_heights.jpg");
+			LogicEntityManager.getInstance().changeScene();
 		}
 		
 		
@@ -286,6 +286,16 @@ package Core
 		public function set stage(value:Stage):void
 		{
 			_stage = value;
+		}
+
+		public function get ashEngine():Engine
+		{
+			return _ashEngine;
+		}
+
+		public function set ashEngine(value:Engine):void
+		{
+			_ashEngine = value;
 		}
 
 

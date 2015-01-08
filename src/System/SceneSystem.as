@@ -56,13 +56,31 @@ package System
 		
 		private function onAdded( node:SceneNode ):void
 		{
+			if( node.scene.terrain )
+			{
+				GameRoot.getInstance().view.scene.addChild( node.scene.terrain );
+			}
 			
+			if( node.scene.skyBox )
+			{
+				GameRoot.getInstance().view.scene.addChild( node.scene.skyBox );
+			}
 		}
 		
 		
 		private function onRemoved( node:SceneNode ):void
 		{
-		
+			if( node.scene.terrain )
+			{
+				GameRoot.getInstance().view.scene.removeChild( node.scene.terrain );
+			}
+			
+			if( node.scene.skyBox )
+			{
+				GameRoot.getInstance().view.scene.removeChild( node.scene.skyBox );
+			}
+			
+			node.scene.dispose();
 		}
 		
 		
@@ -78,7 +96,13 @@ package System
 		
 		override public function update(time:Number):void
 		{
-		
+			for( var node:SceneNode = _sceneList.head; node; node = node.next )
+			{
+				if( node.scene.sun )
+				{
+					node.scene.sun.update();
+				}
+			}
 		}
 	}
 }

@@ -2,11 +2,15 @@ package Component.Scene
 {
 	import Component.IComponet;
 	
-	import Core.Renderable.SceneObject;
+	import Core.Renderable.A3DSun;
+	import Core.Renderable.A3DSkyBox;
+	import Core.Renderable.A3DTerrain;
 
 	public class SceneComponent extends IComponet
 	{
-		private var _scene:SceneObject;
+		private var _terrain:A3DTerrain;
+		private var _skyBox:A3DSkyBox;
+		private var _sun:A3DSun;
 		
 		public function SceneComponent()
 		{
@@ -16,20 +20,50 @@ package Component.Scene
 		
 		override public function dispose():void
 		{
-			_scene.dispose();
-			_scene = null;
+			if( _terrain )
+			{
+				_terrain.dispose();
+				_terrain = null;
+			}
+			
+			if( _skyBox )
+			{
+				_skyBox.dispose();
+				_skyBox = null;
+			}
 		}
 		
 
-		public function get scene():SceneObject
+		public function get terrain():A3DTerrain
 		{
-			return _scene;
+			return _terrain;
 		}
 
-		public function set scene(value:SceneObject):void
+		public function set terrain(value:A3DTerrain):void
 		{
-			_scene = value;
+			_terrain = value;
 		}
+
+		public function get skyBox():A3DSkyBox
+		{
+			return _skyBox;
+		}
+
+		public function set skyBox(value:A3DSkyBox):void
+		{
+			_skyBox = value;
+		}
+
+		public function get sun():A3DSun
+		{
+			return _sun;
+		}
+
+		public function set sun(value:A3DSun):void
+		{
+			_sun = value;
+		}
+
 
 	}
 }
