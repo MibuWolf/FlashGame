@@ -20,13 +20,6 @@ package System
 	{
 		private var _testScene:Mesh;
 		
-		private var terrainMaterial:TextureMaterial;
-		[Embed(source="/../bin-debug/embeds/terrain/terrain_diffuse.jpg")]
-		private var Albedo:Class;  
-		
-		[Embed(source="/../bin-debug/embeds/terrain/terrain_heights.jpg")]
-		private var HeightMap:Class;
-		
 		private var _sceneList:NodeList;
 		
 		public function SceneSystem()
@@ -40,13 +33,6 @@ package System
 		 * */
 		override public function addToEngine(engine:Engine):void
 		{
-//			terrainMaterial = new TextureMaterial(Cast.bitmapTexture(Albedo));;
-//			terrainMaterial.ambientColor = 0x303040;
-//			terrainMaterial.ambient = 1;
-//			terrainMaterial.specular = .2;
-//			var terrain:Elevation = new Elevation(terrainMaterial, Cast.bitmapData(HeightMap), 5000, 1300, 5000, 250, 250);
-//			GameRoot.getInstance().view.scene.addChild( terrain );
-			
 			_sceneList = engine.getNodeList( SceneNode );
 			
 			_sceneList.nodeAdded.add( onAdded );
@@ -65,6 +51,16 @@ package System
 			{
 				GameRoot.getInstance().view.scene.addChild( node.scene.skyBox );
 			}
+			
+			if( node.scene.sun )
+			{
+				GameRoot.getInstance().view.scene.addChild( node.scene.sun );
+			}
+			
+			if( node.scene.water )
+			{
+				GameRoot.getInstance().view.scene.addChild( node.scene.water );
+			}
 		}
 		
 		
@@ -78,6 +74,16 @@ package System
 			if( node.scene.skyBox )
 			{
 				GameRoot.getInstance().view.scene.removeChild( node.scene.skyBox );
+			}
+			
+			if( node.scene.sun )
+			{
+				GameRoot.getInstance().view.scene.removeChild( node.scene.sun );
+			}
+			
+			if( node.scene.water )
+			{
+				GameRoot.getInstance().view.scene.removeChild( node.scene.water );
 			}
 			
 			node.scene.dispose();
@@ -100,7 +106,12 @@ package System
 			{
 				if( node.scene.sun )
 				{
-					node.scene.sun.update();
+					node.scene.sun.updata();
+				}
+				
+				if( node.scene.water )
+				{
+					node.scene.water.updata();
 				}
 			}
 		}

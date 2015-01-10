@@ -17,6 +17,9 @@ package Core
 	import away3d.core.managers.Stage3DProxy;
 	import away3d.core.render.RendererBase;
 	import away3d.events.Stage3DEvent;
+	import away3d.lights.DirectionalLight;
+	import away3d.materials.lightpickers.LightPickerBase;
+	import away3d.materials.lightpickers.StaticLightPicker;
 	
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -32,6 +35,8 @@ package Core
 		private var _profile:String = "baseline"
 		private var _view:View3D;
 		private var _viewSecond:View3D;
+		private var _mainLight:DirectionalLight;
+		private var _mainLightPick:LightPickerBase;
 		
 		private var _ashEngine:Engine;
 		private var _lastFrameTime:int;			// 上一帧执行的机器时间
@@ -93,6 +98,14 @@ package Core
 			_view.camera.lens.far = 10000;
 			_view.camera.lens.near = 1;
 			_view.camera.y = 300;
+			
+			
+			_mainLight = new DirectionalLight(-300, -300, -5000);
+			_mainLight.color = 0xfffdc5;
+			_mainLight.ambient = 1;
+			_view.scene.addChild(_mainLight);
+			
+			_mainLightPick = new StaticLightPicker( [_mainLight] );
 			
 			CameraManager.getInstance().createCameraController( CameraType.FIRSTPERSONMODEL, _view.camera, null, 180, 0 );
 			
@@ -296,6 +309,26 @@ package Core
 		public function set ashEngine(value:Engine):void
 		{
 			_ashEngine = value;
+		}
+
+		public function get mainLight():DirectionalLight
+		{
+			return _mainLight;
+		}
+
+		public function set mainLight(value:DirectionalLight):void
+		{
+			_mainLight = value;
+		}
+
+		public function get mainLightPick():LightPickerBase
+		{
+			return _mainLightPick;
+		}
+
+		public function set mainLightPick(value:LightPickerBase):void
+		{
+			_mainLightPick = value;
 		}
 
 

@@ -36,8 +36,6 @@ package Core.Renderable
 			
 			sunPostion = sunPos;
 			
-			GameRoot.getInstance().view.scene.addChild( this );
-			
 			ResourcesManager.getInstance().loadTexture( name, onLoadSprite );
 		}
 		
@@ -61,7 +59,7 @@ package Core.Renderable
 			this.addChild( sunLight );
 		}
 		
-		public function update():void
+		public function updata():void
 		{
 			if( !sun )
 				return;

@@ -2,15 +2,17 @@ package Component.Scene
 {
 	import Component.IComponet;
 	
-	import Core.Renderable.A3DSun;
 	import Core.Renderable.A3DSkyBox;
+	import Core.Renderable.A3DSun;
 	import Core.Renderable.A3DTerrain;
+	import Core.Renderable.A3DWater;
 
 	public class SceneComponent extends IComponet
 	{
 		private var _terrain:A3DTerrain;
 		private var _skyBox:A3DSkyBox;
 		private var _sun:A3DSun;
+		private var _water:A3DWater;
 		
 		public function SceneComponent()
 		{
@@ -30,6 +32,18 @@ package Component.Scene
 			{
 				_skyBox.dispose();
 				_skyBox = null;
+			}
+			
+			if( _sun )
+			{
+				_sun.dispose();
+				_sun = null;
+			}
+			
+			if( _water )
+			{
+				_water.dispose();
+				_water = null;
 			}
 		}
 		
@@ -62,6 +76,16 @@ package Component.Scene
 		public function set sun(value:A3DSun):void
 		{
 			_sun = value;
+		}
+
+		public function get water():A3DWater
+		{
+			return _water;
+		}
+
+		public function set water(value:A3DWater):void
+		{
+			_water = value;
 		}
 
 

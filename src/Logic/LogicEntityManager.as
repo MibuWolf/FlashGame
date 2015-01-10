@@ -3,14 +3,16 @@ package Logic
 	import Component.Scene.SceneComponent;
 	
 	import Core.GameRoot;
-	import Core.Renderable.A3DSun;
 	import Core.Renderable.A3DSkyBox;
+	import Core.Renderable.A3DSun;
 	import Core.Renderable.A3DTerrain;
+	import Core.Renderable.A3DWater;
 	
 	import ash.core.Entity;
 	import ash.tools.ComponentPool;
 	
 	import away3d.primitives.SkyBox;
+	import away3d.textures.CubeTextureBase;
 	
 	import flash.geom.Vector3D;
 
@@ -42,12 +44,12 @@ package Logic
 			
 			sceneComponent.terrain = new A3DTerrain( "E:/Code/flashgame/bin-debug/embeds/terrain/terrain_diffuse.jpg","E:/Code/flashgame/bin-debug/embeds/terrain/terrain_heights.jpg" );
 			
-			sceneComponent.skyBox = new A3DSkyBox( "E:/Code/flashgame/bin-debug/embeds/skybox/posx.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/negx.jpg",
-				"E:/Code/flashgame/bin-debug/embeds/skybox/posy.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/negy.jpg",
-				"E:/Code/flashgame/bin-debug/embeds/skybox/posz.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/negz.jpg" );
+			sceneComponent.skyBox = new A3DSkyBox( "E:/Code/flashgame/bin-debug/embeds/skybox/snow_positive_x.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/snow_negative_x.jpg",
+				"E:/Code/flashgame/bin-debug/embeds/skybox/snow_positive_y.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/snow_negative_y.jpg",
+				"E:/Code/flashgame/bin-debug/embeds/skybox/snow_positive_z.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/snow_negative_z.jpg" );
 			
 			var array:Array = new Array();
-			var sunPos:Vector3D = new Vector3D( 0, 4000, 3000 );
+			var sunPos:Vector3D = new Vector3D( 1900, 3500, 3000 );
 			
 			array.push( {name:"E:/Code/flashgame/bin-debug/embeds/lensflare/flare10.jpg",size:3.2,postion:-0.01,opacity:147.9} );
 			array.push( {name:"E:/Code/flashgame/bin-debug/embeds/lensflare/flare11.jpg",size:4.8,postion:0,opacity:30.6} );
@@ -64,6 +66,10 @@ package Logic
 			array.push( {name:"E:/Code/flashgame/bin-debug/embeds/lensflare/flare2.jpg",size:2,postion:2.36,opacity:68.4} );
 			
 			sceneComponent.sun = new A3DSun( "E:/Code/flashgame/bin-debug/embeds/lensflare/flare2.jpg", sunPos, array );
+			
+			var cubeTex:CubeTextureBase = null;
+			
+			sceneComponent.water = new A3DWater( 4776,4776,199,199, sceneComponent.skyBox, "E:/Code/flashgame/bin-debug/embeds/water_normals.jpg", "E:/Code/flashgame/bin-debug/embeds/water_normals.jpg"  );
 			
 			entity.add( sceneComponent );
 			

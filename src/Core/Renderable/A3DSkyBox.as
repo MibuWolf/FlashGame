@@ -125,7 +125,7 @@ package Core.Renderable
 					this._skyBox.dispose();
 					this._skyBox = null;
 				}
-				
+
 				var cube:BitmapCubeTexture = new BitmapCubeTexture( _posX, _negX, _posY, _negY, _posZ, _negZ );
 				this._skyBox = new SkyBox( cube );
 				
@@ -180,5 +180,16 @@ package Core.Renderable
 				_negZ = null;
 			}
 		}
+
+		public function get skyBox():SkyBox
+		{
+			return _skyBox;
+		}
+
+		public function set skyBox(value:SkyBox):void
+		{
+			_skyBox = value;
+		}
+
 	}
 }
