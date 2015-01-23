@@ -8,6 +8,7 @@ package Core.Renderable
 	import away3d.extrusions.Elevation;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.TextureMaterial;
+	import away3d.materials.methods.FogMethod;
 	import away3d.primitives.SkyBox;
 	import away3d.textures.BitmapTexture;
 	import away3d.textures.Texture2DBase;
@@ -47,6 +48,7 @@ package Core.Renderable
 			
 			var tex:BitmapTexture = new BitmapTexture( bitmap.bitmapData );
 			this._terrainMaterial = new TextureMaterial( tex );
+			this._terrainMaterial.addMethod( new FogMethod(0, 2000, 0x5f5e6e) );
 			
 			if( _terrainHBitmapData )
 			{
@@ -69,6 +71,15 @@ package Core.Renderable
 			}
 		}
 		
+		
+		public function getHeight( x:Number, z:Number ):Number
+		{
+			if( !_terrain )
+				return 290;
+			
+//			return _terrain.getHeightAt( x, z );
+			return 275;
+		}
 		
 		override public function dispose():void
 		{

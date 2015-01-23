@@ -17,7 +17,7 @@ package Camera
 		private var _cameraModel:ICameraModel;					// 默认相机控制
 		private var _cameraModelSecond:ICameraModel;				// 第二相机控制
 		
-
+		private var _lock:Boolean;
 		
 		public function CameraManager()
 		{
@@ -234,6 +234,16 @@ package Camera
 		public function set cameraModelSecond(value:ICameraModel):void
 		{
 			_cameraModelSecond = value;
+		}
+
+		public function get lock():Boolean
+		{
+			return _lock;
+		}
+
+		public function set lock(value:Boolean):void
+		{
+			_lock = value;
 		}
 		
 		

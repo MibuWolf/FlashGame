@@ -1,11 +1,16 @@
 package Core.Renderable
 {
 	import Core.GameRoot;
+	import Core.Renderable.ShallowWater.DisturbanceBrush;
+	import Core.Renderable.ShallowWater.FluidDisturb;
+	import Core.Renderable.ShallowWater.ShallowFluid;
 	import Core.ResourcesManager;
 	
 	import away3d.containers.ObjectContainer3D;
+	import away3d.core.base.SubGeometry;
 	import away3d.core.pick.PickingColliderType;
 	import away3d.entities.Mesh;
+	import away3d.events.MouseEvent3D;
 	import away3d.lights.PointLight;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.MaterialBase;
@@ -21,6 +26,8 @@ package Core.Renderable
 	import away3d.textures.Texture2DBase;
 	
 	import flash.display.Bitmap;
+	import flash.display.Sprite;
+	import flash.geom.Vector3D;
 
 	public class A3DWater extends ObjectContainer3D
 	{
@@ -30,11 +37,29 @@ package Core.Renderable
 		private var normalTex2:Texture2DBase;	// 法线贴图2
 		
 		private var bInitSkyBox:Boolean = false;
+		private var normalMethod:SimpleWaterNormalMethod;	// 水的法线计算方法
 		
-		private var normalMethod:SimpleWaterNormalMethod;
+		// 流体
+		private var _fluid:ShallowFluid;		
+		private var _fluidDisturb:FluidDisturb;
+		private var _mouseBrush:DisturbanceBrush;
+		
+		private var _planeDisturb:Boolean = false;
+		private var _mouseBrushLife:uint = 0;
+		private var _mouseBrushStrength:Number = -5;
+		private var _planeX:Number;
+		private var _planeY:Number;
+		private var _planeSize:Number;
+		private var _gridDimension:uint = 250;
+		private var _gridSpacing:uint = 5;
+		
+		[Embed(source="/../bin-debug/embeds/assets.swf", symbol="Brush3")]
+		private var Brush3:Class;
 		
 		public function A3DWater( width:Number, heigh:Number, SegmentsX:uint, SegmentsY:uint, skybox:A3DSkyBox, normalTex1:String, normalTex2:String )
 		{
+			_planeSize = width;
+			
 			var mat:ColorMaterial = initMaterial( skybox );
 			
 			initPlane( width, heigh, SegmentsX, SegmentsY, mat );
@@ -77,11 +102,14 @@ package Core.Renderable
 		// 初始化水平面
 		public function	initPlane( width:Number, heigh:Number, SegmentsX:uint, SegmentsY:uint, mat:ColorMaterial ):void
 		{
-			var planeGeometry:PlaneGeometry = new PlaneGeometry( width, heigh, SegmentsX, SegmentsY );
+			var planeSegments:uint = (_gridDimension - 1);
+			_planeSize = planeSegments*_gridSpacing;
+			
+			var planeGeometry:PlaneGeometry = new PlaneGeometry( _planeSize, _planeSize, planeSegments, planeSegments );
 			
 			plane = new Mesh( planeGeometry, mat );
-			plane.x -= width/2;
-			plane.z -= heigh/2;
+			plane.x = 0;
+			plane.z = 0;
 			plane.y = 290;
 			plane.mouseEnabled = true;
 			plane.pickingCollider = PickingColliderType.BOUNDS_ONLY;
@@ -91,6 +119,51 @@ package Core.Renderable
 			plane.geometry.scaleUV(80, 80);
 			
 			this.addChild( plane );
+			
+			initFluid( _planeSize, _planeSize, planeSegments, planeSegments );
+
+		}
+		
+		// 初始化流体
+		private function initFluid( width:Number, heigh:Number, SegmentsX:uint, SegmentsY:uint ):void
+		{		
+			var drop:Sprite = new Brush3() as Sprite;
+			_mouseBrush = new DisturbanceBrush();
+			_mouseBrush.fromSprite(drop);
+			
+			// Fluid.
+			var dt:Number = 1 / 30;
+			var viscosity:Number = 0.3;
+			var waveVelocity:Number = 0.99; // < 1 or the sim will collapse.
+			_fluid = new ShallowFluid(SegmentsX+1, SegmentsX + 1, width / SegmentsX, dt, waveVelocity, viscosity);
+			
+			// Disturbance util.
+			_fluidDisturb = new FluidDisturb(_fluid);
+			
+		}
+		
+		
+		// 计算产生水的波动效果
+		private var _helpVec:Vector3D = new Vector3D();
+		private var _helpDirVec:Vector3D = new Vector3D( 0, -1, 0 );
+		public function clcFluid( pos:Vector3D, height:Number = 100 ):void
+		{
+			if( !plane || !pos )
+			{
+				_planeDisturb = false;
+				return;
+			}
+			
+			_helpVec.x = pos.x;	_helpVec.y = pos.y + height;	_helpVec.z = pos.z;
+			var bSuc:Boolean = plane.isIntersectingRay( _helpVec, _helpDirVec );
+			if( !bSuc )
+			{
+				_planeDisturb = false;
+				return;
+			}
+			
+			_planeDisturb = true;
+			updatePlaneCoords( ( _helpVec.x - plane.scenePosition.x ), ( _helpVec.z - plane.scenePosition.z ) );
 		}
 		
 		
@@ -125,6 +198,12 @@ package Core.Renderable
 			}
 		}
 		
+		private function updatePlaneCoords(x:Number, y:Number):void
+		{
+			_planeX = x/_planeSize;
+			_planeY = y/_planeSize;
+		}
+		
 		
 		public function updata():void
 		{
@@ -144,6 +223,37 @@ package Core.Renderable
 				normalMethod.water1OffsetY -= 0.0024;
 				normalMethod.water2OffsetX += 0.001;
 				normalMethod.water2OffsetY -= 0.0015;
+			}
+			
+			updataFluid();
+		}
+		
+		
+		private function updataFluid():void
+		{
+			if( !_fluid || !_fluidDisturb )
+				return;
+			
+			// Update fluid.
+			_fluid.evaluate();
+			
+			// Update memory disturbances.
+			_fluidDisturb.updateMemoryDisturbances();
+			
+			// Update plane to fluid.
+			var subGeometry:SubGeometry = plane.geometry.subGeometries[0] as SubGeometry;
+			subGeometry.updateVertexData(_fluid.points);
+			subGeometry.updateVertexNormalData(_fluid.normals);
+			subGeometry.updateVertexTangentData(_fluid.tangents);
+			plane.rotationX = 90;
+			plane.x = -1100;
+			plane.z = -1300;
+			
+			if (_planeDisturb) {
+				if (_mouseBrushLife == 0)
+					_fluidDisturb.disturbBitmapInstant(_planeX, _planeY, -_mouseBrushStrength, _mouseBrush.bitmapData);
+				else
+					_fluidDisturb.disturbBitmapMemory(_planeX, _planeY, -5*_mouseBrushStrength, _mouseBrush.bitmapData, _mouseBrushLife, 0.1);
 			}
 		}
 	}

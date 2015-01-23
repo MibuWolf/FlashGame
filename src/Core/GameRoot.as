@@ -5,6 +5,9 @@ package Core
 	
 	import Logic.LogicEntityManager;
 	
+	import System.MoveControlSystem;
+	import System.MovementSystem;
+	import System.RenderObjectSystem;
 	import System.SceneSystem;
 	import System.SystemPriority;
 	
@@ -16,6 +19,7 @@ package Core
 	import away3d.core.managers.Stage3DManager;
 	import away3d.core.managers.Stage3DProxy;
 	import away3d.core.render.RendererBase;
+	import away3d.debug.Trident;
 	import away3d.events.Stage3DEvent;
 	import away3d.lights.DirectionalLight;
 	import away3d.materials.lightpickers.LightPickerBase;
@@ -100,10 +104,14 @@ package Core
 			_view.camera.y = 300;
 			
 			
-			_mainLight = new DirectionalLight(-300, -300, -5000);
+			_mainLight = new DirectionalLight(300, -300, -5000);
 			_mainLight.color = 0xfffdc5;
 			_mainLight.ambient = 1;
 			_view.scene.addChild(_mainLight);
+			
+			var t:Trident = new Trident( 500 );
+			t.x = -50;	t.y =290; t.z = -1000;
+			_view.scene.addChild( t );
 			
 			_mainLightPick = new StaticLightPicker( [_mainLight] );
 			
@@ -183,6 +191,7 @@ package Core
 			InitSystem();
 			
 			LogicEntityManager.getInstance().changeScene();
+			LogicEntityManager.getInstance().CreatePlayer();
 		}
 		
 		
@@ -192,6 +201,9 @@ package Core
 		private function InitSystem():void
 		{
 			_ashEngine.addSystem( new SceneSystem(), SystemPriority.UPDATE );
+			_ashEngine.addSystem( new RenderObjectSystem(), SystemPriority.UPDATE );
+			_ashEngine.addSystem( new MovementSystem(), SystemPriority.UPDATE );
+			_ashEngine.addSystem( new MoveControlSystem(), SystemPriority.UPDATE );
 		}
 		
 		

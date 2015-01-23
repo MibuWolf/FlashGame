@@ -1,8 +1,8 @@
 package Component
 {
-	public class IComponet
+	public class IComponent
 	{
-		public function IComponet()
+		public function IComponent()
 		{
 		}
 		

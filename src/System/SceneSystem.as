@@ -18,8 +18,6 @@ package System
 
 	public class SceneSystem extends System
 	{
-		private var _testScene:Mesh;
-		
 		private var _sceneList:NodeList;
 		
 		public function SceneSystem()

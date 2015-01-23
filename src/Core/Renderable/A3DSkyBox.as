@@ -3,6 +3,7 @@ package Core.Renderable
 	import Core.ResourcesManager;
 	
 	import away3d.containers.ObjectContainer3D;
+	import away3d.materials.SkyBoxMaterial;
 	import away3d.primitives.SkyBox;
 	import away3d.textures.BitmapCubeTexture;
 	

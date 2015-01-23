@@ -1,5 +1,8 @@
 package Logic
 {
+	import Component.Movement.MovementComponent;
+	import Component.Scene.ContainerComponent;
+	import Component.Scene.RenderObjectComponent;
 	import Component.Scene.SceneComponent;
 	
 	import Core.GameRoot;
@@ -44,9 +47,9 @@ package Logic
 			
 			sceneComponent.terrain = new A3DTerrain( "E:/Code/flashgame/bin-debug/embeds/terrain/terrain_diffuse.jpg","E:/Code/flashgame/bin-debug/embeds/terrain/terrain_heights.jpg" );
 			
-			sceneComponent.skyBox = new A3DSkyBox( "E:/Code/flashgame/bin-debug/embeds/skybox/snow_positive_x.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/snow_negative_x.jpg",
-				"E:/Code/flashgame/bin-debug/embeds/skybox/snow_positive_y.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/snow_negative_y.jpg",
-				"E:/Code/flashgame/bin-debug/embeds/skybox/snow_positive_z.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/snow_negative_z.jpg" );
+			sceneComponent.skyBox = new A3DSkyBox( "E:/Code/flashgame/bin-debug/embeds/skybox/posx.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/negx.jpg",
+				"E:/Code/flashgame/bin-debug/embeds/skybox/posy.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/negy.jpg",
+				"E:/Code/flashgame/bin-debug/embeds/skybox/posz.jpg", "E:/Code/flashgame/bin-debug/embeds/skybox/negz.jpg" );
 			
 			var array:Array = new Array();
 			var sunPos:Vector3D = new Vector3D( 1900, 3500, 3000 );
@@ -77,6 +80,29 @@ package Logic
 			return entity;
 		}
 		
+		
+		public function CreatePlayer():Entity
+		{
+			var entity:Entity = new Entity();
+			
+			var obj:RenderObjectComponent = ComponentPool.get( RenderObjectComponent );
+			obj.name = "E:/Code/flashgame/bin-debug/embeds/assets/PolarBear.awd";
+			obj.tex = "E:/Code/flashgame/bin-debug/embeds/polarbear_diffuse.jpg";
+			obj.noramlTex = "E:/Code/flashgame/bin-debug/embeds/polarbear_normals.jpg";
+			obj.speTex = "E:/Code/flashgame/bin-debug/embeds/polarbear_specular.jpg";
+			obj.action = "Breathe";
+			var move:MovementComponent = ComponentPool.get( MovementComponent );
+			move.postion.y = 290;	move.postion.z = -1000;
+			move.roation.x = move.roation.y = move.roation.z = 0;
+			var container:ContainerComponent = ComponentPool.get( ContainerComponent );
+			
+			entity.add( obj );
+			entity.add( move );
+			entity.add( container );
+			
+			GameRoot.getInstance().ashEngine.addEntity( entity );
+			return entity;
+		}
 		
 	}
 }

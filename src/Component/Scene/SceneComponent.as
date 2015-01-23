@@ -1,13 +1,16 @@
 package Component.Scene
 {
-	import Component.IComponet;
+	import Component.IComponent;
 	
 	import Core.Renderable.A3DSkyBox;
 	import Core.Renderable.A3DSun;
 	import Core.Renderable.A3DTerrain;
 	import Core.Renderable.A3DWater;
 
-	public class SceneComponent extends IComponet
+	/**
+	 * 场景组件包含了场景中的地形 天空盒 太阳 水等效果
+	 * */
+	public class SceneComponent extends IComponent
 	{
 		private var _terrain:A3DTerrain;
 		private var _skyBox:A3DSkyBox;

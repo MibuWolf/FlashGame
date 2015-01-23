@@ -34,6 +34,7 @@ package Camera
 		private var strafeAcceleration:Number = 0;
 		
 		
+		
 		public function FirstCameraModel( targetObject:Camera3D, __target:ObjectContainer3D = null, panAngle:Number = 0, tiltAngle:Number = 90 )
 		{
 			_cameraController = new FirstPersonController( targetObject, panAngle, tiltAngle );
@@ -126,6 +127,9 @@ package Camera
 		
 		public function onUpdata( time:Number ):void
 		{
+			if( CameraManager.getInstance().lock )
+				return;
+			
 			if (move) {
 				_cameraController.panAngle = 0.3*(curMouseX - lastMouseX) + lastPanAngle;
 				_cameraController.tiltAngle = 0.3*(curMouseY - lastMouseY) + lastTiltAngle;
